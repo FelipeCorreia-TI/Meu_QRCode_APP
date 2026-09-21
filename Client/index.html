@@ -7,27 +7,30 @@
     <link rel="stylesheet" href="styles/style.css">
     <title>Meu QRCode</title>
 </head>
+
+<body>
+<div class="container">
 <header>
     <div class="barra_superior">
-        <p>MEU QR CODE</p>
+        <p id="cabecalho">MEU QR CODE</p>
     </div>
 </header>
-<body>
-<section>
+
+
     <div class="campo_imagem">
         <img id="foto_visualizar">
     </div>
-</section>
 
-</section>
+
     <div class="campo_botao">
         <label for="upload_imagem" id="botao_upload">Adicionar QR Code</label>
         <input id="upload_imagem" type="file" accept="image/*" style="display: none;">
 
         <input id="remove_imagem" type="button" name="remove_imagem" value="Remover QR Code">
     </div>
-</section>
-
-<script src="scripts/script.js"></script>    
+</div>
+<script src="scripts/script.js"></script>   
+ 
 </body>
+
 </html>
