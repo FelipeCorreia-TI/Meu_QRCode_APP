@@ -44,12 +44,13 @@ body{
     grid-column: 2; /*Aplica o elemento na 2 coluna*/
     border: 4px solid #F70002;
     background-color: #FFFFFD;
-    width: 500px; /*Determina Largura do campo*/
-    height: 500px; /*Altura do Campo*/
+    width: 40vh; /*Determina Largura do campo*/
+    height: 40vh; /*Altura do Campo*/
     overflow: hidden; /*Tudo que sair da altura e largura será escondido*/
     border-radius: 10px; /*Arredondamento da borda*/
     margin-top: 40px;
 }
+
 
 #foto_visualizar{
     display: flex;
@@ -58,6 +59,7 @@ body{
     height: 100%; /*Altura total do campo*/
     object-fit: cover; /*Enquadra/corta o objeto dentro do campo sem distorcer*/
     object-position: center; /*Foca o objeto ao meio do campo*/
+    color: transparent;
 }
 
 .campo_botao{
@@ -79,4 +81,11 @@ body{
     color: #FFFFFD;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 
+}
+@media (min-width: 768px){
+    
+.campo_imagem{
+    width: 500px; /*Determina Largura do campo*/
+    height: 500px; /*Altura do Campo*/
+    }
 }
