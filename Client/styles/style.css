@@ -1,7 +1,7 @@
 *{
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
+    box-sizing: border-box;/*Faz com que todo elemento não considere sua border já seja incluida ao calculo final de Height e Width*/
+    padding: 0; /*Tira o preenchimento de todos os elementos*/ 
+    margin: 0; /*Tira a margem de todos os elementos*/
 }
 
 body{
@@ -9,36 +9,74 @@ body{
 }
 
 .container{
-    display: flex;
-    flex-direction: column;
+    display: flex; /*Define todo o esqueleto/container do APP como flex*/
+    flex-direction: column; /*Define a orientação como Coluna*/
 }
 
 
 .barra_superior{
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
-    padding: 1vh;
+    display: grid; /*torna a barra superior  em visualização GRID*/
+    grid-template-columns: repeat(3,1fr); /*Cria 3 colunas em linha (orientação padrão) com 1 fração do espaço cada*/
+    padding: 1vh; /*Preenchimento de 1% da altura de visualização - viewport height*/
     background:#FF0413 ;
 }
 
-#cabecalho{
-    display: grid;
-    grid-column: span 3;
-    justify-content: space-around;
+.content-main{
+    display: grid; /*Transforma em GRID*/
+    grid-template-columns: repeat(3,1fr); /*Cria 3 colunas na caixa de conteúdo principal*/
+}
 
+#cabecalho{
+    display: grid; 
+    grid-column: span 3; /*Faz com que o elemento específico tome 3 colunas do grid*/
+    justify-content: center; /*Definiu que o elemento deve estar ao centro do local em qual ocupa*/
     color: #FFFFFD;
+    padding: 10px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: bolder;
+    font-size: larger;
+
+    
 }
 
 .campo_imagem{
-    display: flex;
-    flex-direction: column;
+    display: grid; /*Transforma em GRID*/
+    grid-column: 2; /*Aplica o elemento na 2 coluna*/
     border: 4px solid #F70002;
-    border-radius: 20px;
-    max-width: 40vh ;
-    max-height: 50vh;
+    background-color: #FFFFFD;
+    width: 500px; /*Determina Largura do campo*/
+    height: 500px; /*Altura do Campo*/
+    overflow: hidden; /*Tudo que sair da altura e largura será escondido*/
+    border-radius: 10px; /*Arredondamento da borda*/
+    margin-top: 40px;
 }
 
 #foto_visualizar{
     display: flex;
-    border-radius: 10px;
+    border-radius: 5px;
+    width: 100%; /*Largura total do campo*/
+    height: 100%; /*Altura total do campo*/
+    object-fit: cover; /*Enquadra/corta o objeto dentro do campo sem distorcer*/
+    object-position: center; /*Foca o objeto ao meio do campo*/
+}
+
+.campo_botao{
+    display: grid;  /*Transforma em GRID*/
+    grid-auto-flow: column; /*Define a orientação do elemento como COLUMN*/
+    justify-content: space-around;
+    grid-column: 2; /*Direciona o campo para a coluna dois (aonde já havia outro campo, que automaticamente é jogada para baixo)*/
+    margin-top: 40px;
+
+}
+
+.botao{
+    display: grid;
+    justify-content: center;
+    background-color: #FF0413;
+    border: 1.5px solid  #FFFFFD;
+    border-radius: 50px;
+    padding: 10px;
+    color: #FFFFFD;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
 }
