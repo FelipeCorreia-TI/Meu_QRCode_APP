@@ -1,36 +1,50 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="icon/icon_site.jfif" type="image/x-icon">
-    <link rel="stylesheet" href="styles/style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="icon/icon_site.jfif" type="image/x-icon" />
+    <link rel="stylesheet" href="styles/style.css" />
     <title>Meu QRCode</title>
-</head>
+  </head>
 
-<body>
-<div class="container">
-<header>
-    <div class="barra_superior">
-        <p id="cabecalho">MEU QR CODE</p>
+  <body>
+    <div class="container">
+      <header>
+        <div class="barra_superior">
+          <!--Cria o elemento da barra superior-->
+          <p id="cabecalho">MEU QR CODE SESI</p>
+          <!--Título do app-->
+        </div>
+      </header>
+
+      <main class="content-main">
+        <section class="campo_imagem">
+          <!--Aonde a imagem ficará-->
+          <img id="foto_visualizar" />
+        </section>
+
+        <section class="campo_botao">
+          <label class="botao" for="upload_imagem" id="botao_upload">Adicionar QR Code</label>
+          <input
+            id="upload_imagem"
+            type="file"
+            accept="image/*"
+            style="display: none"
+          />
+          
+
+          <label class="botao" for="remove_imagem" id="remove_imagem">Remover QR Code</label>
+          <input
+            id="remove_imagem"
+            type="button"
+            name="remove_imagem"
+            value="Remover QR Code"
+            style="display:none"
+          />
+        </section>
+      </main>
     </div>
-</header>
-
-
-    <div class="campo_imagem">
-        <img id="foto_visualizar">
-    </div>
-
-
-    <div class="campo_botao">
-        <label for="upload_imagem" id="botao_upload">Adicionar QR Code</label>
-        <input id="upload_imagem" type="file" accept="image/*" style="display: none;">
-
-        <input id="remove_imagem" type="button" name="remove_imagem" value="Remover QR Code">
-    </div>
-</div>
-<script src="scripts/script.js"></script>   
- 
-</body>
-
+    <script src="scripts/script.js"></script>
+  </body>
 </html>
