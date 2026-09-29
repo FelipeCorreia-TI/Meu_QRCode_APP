@@ -86,10 +86,16 @@ body{
     cursor: pointer;
     transition: transform 0.1s ease;
     -webkit-tap-highlight-color: transparent;
+    opacity: 100;
 }
 
 .botao:active{
     transform: scale(0.95);
+}
+
+#remove_imagem{
+    pointer-events: none;
+    opacity: 0.5;
 }
 
 @media (min-width: 768px){
