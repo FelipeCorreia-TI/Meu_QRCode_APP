@@ -11,6 +11,8 @@ uploadFoto.addEventListener('change', function (event) { // na variável uploadF
 
   if (arquivo && arquivo.type.startsWith('image/')) { //Se houver arquivo e o tipo do arquivo foi 'image/*' (qualquer tipo de arquivo imagem)
     fotoVisualizar.src = URL.createObjectURL(arquivo); //Usa uma API nativa para gerar uma URL temporária e joga o elemento de upload foto para dentro do elemento img do html
+
+    removeFoto.style = "pointer-events:all ; opacity: 100 ;";
     removeFoto.disabled = false;
   } else { //Caso a validação não seja atendida
     fotoVisualizar.src = ""; //deixa o elemento vázio e dá um aviso.
@@ -19,7 +21,12 @@ uploadFoto.addEventListener('change', function (event) { // na variável uploadF
 });
 
 removeFoto.onclick = function(){
-    fotoVisualizar.src = ""
+    var confirmar = confirm("Deseja realmente excluir?")
+
+    if(confirmar == true){
+      fotoVisualizar.src = '';
+      removeFoto.style = "pointer-events:none; opacity: 0.5";
+    } 
 };
 
 
