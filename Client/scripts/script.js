@@ -15,7 +15,7 @@ uploadFoto.addEventListener('change', function (event) { // na variável uploadF
     removeFoto.style = "pointer-events:all ; opacity: 100 ;";
     removeFoto.disabled = false;
   } else { //Caso a validação não seja atendida
-    fotoVisualizar.src = ""; //deixa o elemento vázio e dá um aviso.
+    fotoVisualizar.src = "https://s2-techtudo.glbimg.com/mTOxpglY5vPGVghs4JD4fihcVbo=/0x0:620x443/600x0/smart/filters:gifv():strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2021/Y/5/iF8OmoTy6eQdkT9Xjz5g/2012-11-05-fundo-transparente.png"; //deixa o elemento vázio e dá um aviso.
     alert("Por favor, selecione um arquivo de imagem válido.");
   }
 });
@@ -24,7 +24,7 @@ removeFoto.onclick = function(){
     var confirmar = confirm("Deseja realmente excluir?")
 
     if(confirmar == true){
-      fotoVisualizar.src = '';
+      fotoVisualizar.src = "https://s2-techtudo.glbimg.com/mTOxpglY5vPGVghs4JD4fihcVbo=/0x0:620x443/600x0/smart/filters:gifv():strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2021/Y/5/iF8OmoTy6eQdkT9Xjz5g/2012-11-05-fundo-transparente.png";
       removeFoto.style = "pointer-events:none; opacity: 0.5";
     } 
 };
