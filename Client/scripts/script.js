@@ -1,33 +1,101 @@
-const fotoVisualizar = document.getElementById ("foto_visualizar"); //Pega o Id do elemento HTML - foto_visualizar
+const fotoVisualizar = document.getElementById("foto_visualizar"); 
+const removeFoto = document.getElementById("remove_imagem");
+const uploadFoto = document.getElementById("upload_imagem"); 
 
-const removeFoto = document.getElementById("remove_imagem")
+removeFoto.classList.add("desabilitado");
 
-const uploadFoto = document.getElementById("upload_imagem"); //Pega o Id do elemento HTML - upload_imagem
+let db = null;
+const request = indexedDB.open("GaleriaDB", 1);
 
-removeFoto.disabled = true;
+request.onupgradeneeded = function(event) {
+  const banco = event.target.result;
+  if (!banco.objectStoreNames.contains("fotos")) {
+    banco.createObjectStore("fotos", { keyPath: "id" });
+  }
+};
 
-uploadFoto.addEventListener('change', function (event) { // na variável uploadFoto (que pega o id de upload_imagem) adicionamos um evento que irá 'ouvir' o que será feito (ex: click ou change) e o valor dessa escuta vai para variável event (ela é a variável de entrada)
-  const arquivo = event.target.files[0]; //cria uma variável que colocará esse valor de event dentro de uma array denominando sempre o que vir como primeiro
+request.onsuccess = function(event) {
+  db = event.target.result;
+  console.log("IndexedDB conectado.");
+  carregarFotoSalva();
+};
 
-  if (arquivo && arquivo.type.startsWith('image/')) { //Se houver arquivo e o tipo do arquivo foi 'image/*' (qualquer tipo de arquivo imagem)
-    fotoVisualizar.src = URL.createObjectURL(arquivo); //Usa uma API nativa para gerar uma URL temporária e joga o elemento de upload foto para dentro do elemento img do html
+function carregarFotoSalva() {
+  if (!db) return;
 
-    removeFoto.style = "pointer-events:all ; opacity: 100 ;";
-    removeFoto.disabled = false;
-  } else { //Caso a validação não seja atendida
-    fotoVisualizar.src = "https://s2-techtudo.glbimg.com/mTOxpglY5vPGVghs4JD4fihcVbo=/0x0:620x443/600x0/smart/filters:gifv():strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2021/Y/5/iF8OmoTy6eQdkT9Xjz5g/2012-11-05-fundo-transparente.png"; //deixa o elemento vázio e dá um aviso.
+  const transacao = db.transaction("fotos", "readonly");
+  const tabela = transacao.objectStore("fotos");
+  const consulta = tabela.get("foto_atual"); 
+
+  consulta.onsuccess = function() {
+    const registro = consulta.result;
+    
+    if (registro && registro.arquivo) {
+      const urlTemporaria = URL.createObjectURL(registro.arquivo);
+      fotoVisualizar.src = urlTemporaria;
+      removeFoto.classList.remove("desabilitado"); 
+    }
+  };
+}
+
+// EVENTO DE UPLOAD DE FOTO (Com validação de foto única)
+uploadFoto.addEventListener('change', function (event) { 
+  // 👉 REQUISITO: Se o src da imagem já tiver um blob ativo, bloqueia o upload
+  if (fotoVisualizar.src && fotoVisualizar.src.startsWith('blob:')) {
+    alert("Já existe uma foto salva! Remova a foto atual antes de adicionar uma nova.");
+    uploadFoto.value = ""; // Limpa a nova seleção para não bugar o input
+    return; // Para a execução do código aqui
+  }
+
+  const arquivo = event.target.files[0]; 
+
+  if (arquivo && arquivo.type.startsWith('image/')) { 
+    const urlTemporaria = URL.createObjectURL(arquivo);
+    fotoVisualizar.src = urlTemporaria; 
+    removeFoto.classList.remove("desabilitated"); 
+    removeFoto.classList.remove("desabilitado"); 
+
+    const registroFoto = {
+      id: "foto_atual", 
+      nomeArquivo: arquivo.name,
+      tipo: arquivo.type,
+      dataCriacao: new Date().toISOString(),
+      tamanho: arquivo.size,
+      arquivo: arquivo 
+    };
+
+    if (db) {
+      const transacao = db.transaction("fotos", "readwrite");
+      const tabela = transacao.objectStore("fotos");
+      tabela.put(registroFoto); 
+    }
+
+  } else { 
+    limparInterface();
     alert("Por favor, selecione um arquivo de imagem válido.");
   }
 });
 
-removeFoto.onclick = function(){
-    var confirmar = confirm("Deseja realmente excluir?")
+removeFoto.onclick = function() {
+    const desejaRemover = confirm("Tem certeza de que deseja remover esta foto?");
 
-    if(confirmar == true){
-      fotoVisualizar.src = "https://s2-techtudo.glbimg.com/mTOxpglY5vPGVghs4JD4fihcVbo=/0x0:620x443/600x0/smart/filters:gifv():strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2021/Y/5/iF8OmoTy6eQdkT9Xjz5g/2012-11-05-fundo-transparente.png";
-      removeFoto.style = "pointer-events:none; opacity: 0.5";
-    } 
+    
+    if (desejaRemover && db) {
+        const transacao = db.transaction("fotos", "readwrite");
+        const tabela = transacao.objectStore("fotos");
+        const requestDelete = tabela.delete("foto_atual");
+
+        requestDelete.onsuccess = function() {
+          limparInterface();
+        };
+    }
 };
 
-
-
+function limparInterface() {
+  if (fotoVisualizar.src && fotoVisualizar.src.startsWith('blob:')) {
+    URL.revokeObjectURL(fotoVisualizar.src);
+  }
+  fotoVisualizar.src = "https://images.seeklogo.com/logo-png/22/1/sesi-logo-png_seeklogo-223485.png"; 
+  removeFoto.classList.add("desabilitado"); 
+  uploadFoto.value = ""; 
+}
