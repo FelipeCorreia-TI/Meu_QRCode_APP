@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="icon/icon_site.jfif" type="image/x-icon" />
+    <link rel="shortcut icon" href="icon/icon_site.ico" type="image/x-icon" />
     <link rel="stylesheet" href="styles/style.css" />
     <title>Meu QRCode</title>
   </head>
@@ -21,27 +21,29 @@
       <main class="content-main">
         <section class="campo_imagem">
           <!--Aonde a imagem ficará-->
-          <img id="foto_visualizar" src="https://images.seeklogo.com/logo-png/22/1/sesi-logo-png_seeklogo-223485.png"/>
+          <img
+            id="foto_visualizar"
+            src="https://images.seeklogo.com/logo-png/22/1/sesi-logo-png_seeklogo-223485.png"
+          />
         </section>
 
         <section class="campo_botao">
-          <label class="botao" for="upload_imagem" id="botao_upload">Adicionar QR Code</label>
+          <!-- Adicionado o ID correto na label de upload -->
+          <label class="botao" for="upload_imagem" id="label_upload"
+            >Adicionar QR Code</label
+          >
           <input
             id="upload_imagem"
             type="file"
             accept="image/*"
             style="display: none"
           />
-          
 
-          <label class="botao" for="remove_imagem" id="remove_imagem">Remover QR Code</label>
-          <input
-            id="remove_imagem"
-            type="button"
-            name="remove_imagem"
-            value="Remover QR Code"
-            style="display:none"
-          />
+          <!-- Corrigido: O ID remove_imagem ficou apenas na label que o usuário clica -->
+          <label class="botao" for="input_remove" id="remove_imagem"
+            >Remover QR Code</label
+          >
+          <input id="input_remove" type="button" style="display: none" />
         </section>
       </main>
     </div>

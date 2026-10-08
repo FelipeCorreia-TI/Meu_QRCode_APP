@@ -1,8 +1,11 @@
 const fotoVisualizar = document.getElementById("foto_visualizar"); 
-const removeFoto = document.getElementById("remove_imagem");
-const uploadFoto = document.getElementById("upload_imagem"); 
+const removeFoto = document.getElementById("remove_imagem"); // Pega a label de remover
+const uploadFoto = document.getElementById("upload_imagem"); // Pega o input de arquivo
+const labelUpload = document.getElementById("label_upload"); // Pega a label de adicionar
 
+// Estado Inicial: Adicionar liberado, Remover bloqueado
 removeFoto.classList.add("desabilitado");
+labelUpload.classList.remove("desabilitado");
 
 let db = null;
 const request = indexedDB.open("GaleriaDB", 1);
@@ -16,7 +19,7 @@ request.onupgradeneeded = function(event) {
 
 request.onsuccess = function(event) {
   db = event.target.result;
-  console.log("IndexedDB conectado.");
+  console.log("IndexedDB pronto.");
   carregarFotoSalva();
 };
 
@@ -30,30 +33,30 @@ function carregarFotoSalva() {
   consulta.onsuccess = function() {
     const registro = consulta.result;
     
+    // Se achou uma foto no banco, exibe e altera o estado dos botões
     if (registro && registro.arquivo) {
       const urlTemporaria = URL.createObjectURL(registro.arquivo);
       fotoVisualizar.src = urlTemporaria;
+      
+      // ESTADO: Ativa Remover, Desativa Adicionar
       removeFoto.classList.remove("desabilitado"); 
+      labelUpload.classList.add("desabilitado");
     }
   };
 }
 
-// EVENTO DE UPLOAD DE FOTO (Com validação de foto única)
+// EVENTO DE UPLOAD
 uploadFoto.addEventListener('change', function (event) { 
-  // 👉 REQUISITO: Se o src da imagem já tiver um blob ativo, bloqueia o upload
-  if (fotoVisualizar.src && fotoVisualizar.src.startsWith('blob:')) {
-    alert("Já existe uma foto salva! Remova a foto atual antes de adicionar uma nova.");
-    uploadFoto.value = ""; // Limpa a nova seleção para não bugar o input
-    return; // Para a execução do código aqui
-  }
-
-  const arquivo = event.target.files[0]; 
+  const arquivo = event.target.files[0]; // Captura o arquivo usando o índice correto
 
   if (arquivo && arquivo.type.startsWith('image/')) { 
     const urlTemporaria = URL.createObjectURL(arquivo);
     fotoVisualizar.src = urlTemporaria; 
-    removeFoto.classList.remove("desabilitated"); 
+    
+    // ALTERAÇÃO DE ESTADO: Ativa Remover, Desativa Adicionar
+    removeFoto.classList.remove("desabilitated"); // Limpeza de segurança
     removeFoto.classList.remove("desabilitado"); 
+    labelUpload.classList.add("desabilitado"); 
 
     const registroFoto = {
       id: "foto_atual", 
@@ -76,9 +79,12 @@ uploadFoto.addEventListener('change', function (event) {
   }
 });
 
-removeFoto.onclick = function() {
-    const desejaRemover = confirm("Tem certeza de que deseja remover esta foto?");
+// EVENTO DE REMOVER
+removeFoto.onclick = function(e) {
+    // Como é uma label, evitamos qualquer comportamento padrão do navegador
+    e.preventDefault();
 
+    const desejaRemover = confirm("Tem certeza de que deseja remover este QR Code?");
     
     if (desejaRemover && db) {
         const transacao = db.transaction("fotos", "readwrite");
@@ -95,7 +101,12 @@ function limparInterface() {
   if (fotoVisualizar.src && fotoVisualizar.src.startsWith('blob:')) {
     URL.revokeObjectURL(fotoVisualizar.src);
   }
+  
+  // Volta para a imagem padrão do Sesi caso remova o QR Code
   fotoVisualizar.src = "https://images.seeklogo.com/logo-png/22/1/sesi-logo-png_seeklogo-223485.png"; 
+  
+  // RESET DE ESTADO: Bloqueia Remover, Libera Adicionar
   removeFoto.classList.add("desabilitado"); 
-  uploadFoto.value = ""; 
+  labelUpload.classList.remove("desabilitado"); 
+  uploadFoto.value = ""; // Reseta o input
 }
