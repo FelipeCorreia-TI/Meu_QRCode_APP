@@ -8,10 +8,16 @@ body{
     background-color:#3D3B3B ;
 }
 
-.container{
-    display: flex; /*Define todo o esqueleto/container do APP como flex*/
-    flex-direction: column; /*Define a orientação como Coluna*/
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between; /* Distribui topo, meio e botões uniformemente */
+    min-height: 100vh;             /* Ocupa 100% da altura da tela do celular */
+    padding: 20px;
+    box-sizing: border-box;
 }
+
 
 
 .barra_superior{
@@ -21,14 +27,24 @@ body{
     background:#FF0413 ;
 }
 
-.content-main{
-    display: grid; /*Transforma em GRID*/
-    grid-template-columns: repeat(3,1fr); /*Cria 3 colunas na caixa de conteúdo principal*/
+.content-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centraliza verticalmente o conteúdo central */
+    align-items: center;     /* Centraliza horizontalmente */
+    width: 100%;
+    gap: 30px;               /* Cria uma distância segura entre a foto e os botões */
 }
 
 #cabecalho{
-    display: grid; 
-    grid-column: span 3; /*Faz com que o elemento específico tome 3 colunas do grid*/
+    display: grid;/*Faz com que o elemento específico tome 3 colunas do grid*/
+    grid-column:2 ;
+    text-align: center;
+
+
+    
+
     justify-content: center; /*Definiu que o elemento deve estar ao centro do local em qual ocupa*/
     color: #FFFFFD;
     padding: 10px;
@@ -39,37 +55,33 @@ body{
     
 }
 
-.campo_imagem{
-    display: grid; /*Transforma em GRID*/
-    grid-column: 2; /*Aplica o elemento na 2 coluna*/
-    border: 4px solid #F70002;
-    background-color: #FFFFFD;
-    width: 40vh; /*Determina Largura do campo*/
-    height: 40vh; /*Altura do Campo*/
-    overflow: hidden; /*Tudo que sair da altura e largura será escondido*/
-    border-radius: 10px; /*Arredondamento da borda*/
-    margin-top: 40px;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-}
-
-
-#foto_visualizar{
+.campo_imagem {
     display: flex;
-    border-radius: 5px;
-    width: 100%; /*Largura total do campo*/
-    height: 100%; /*Altura total do campo*/
-    object-fit: cover; /*Enquadra/corta o objeto dentro do campo sem distorcer*/
-    object-position: center; /*Foca o objeto ao meio do campo*/
-    color: transparent;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 350px;        /* Define um tamanho limite para não distorcer em telas grandes */
+    
 }
 
-.campo_botao{
-    display: grid;  /*Transforma em GRID*/
-    grid-auto-flow: column; /*Define a orientação do elemento como COLUMN*/
-    justify-content: space-between;
-    grid-column: 2; /*Direciona o campo para a coluna dois (aonde já havia outro campo, que automaticamente é jogada para baixo)*/
-    margin-top: 40px;
+#foto_visualizar {
+    width: 85%;              /* Ocupa 85% da largura da tela do celular (tamanho ideal) */
+    height: auto;            /* Mantém a proporção quadrada perfeita da imagem */
+    border-radius: 15px;     /* Mantém as bordas arredondadas elegantes que você fez */
+    object-fit: contain;     /* Garante que o QR Code não fique esticado ou cortado */
+    border: 4px solid #F70002;
+}
 
+
+.campo_botao {
+    display: flex;
+    flex-direction: column;  /* No celular, empilhar os botões economiza espaço e melhora o clique */
+    width: 100%;
+    max-width: 320px;
+    gap: 15px;               /* 👉 ESSA LINHA ESPAÇA OS BOTÕES ENTRE SI */
+    margin-bottom: 20px;     /* Afasta os botões da bordinha de baixo da tela */
+    
+    
 }
 
 .botao{
