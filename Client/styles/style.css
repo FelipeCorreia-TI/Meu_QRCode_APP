@@ -14,7 +14,6 @@ body{
     align-items: stretch;
     justify-content: space-between; /* Distribui topo, meio e botões uniformemente */
     min-height: 100vh;             /* Ocupa 100% da altura da tela do celular */
-    padding: 20px;
     box-sizing: border-box;
 }
 
@@ -57,8 +56,7 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    max-width: 500px;        /* Define um tamanho limite para não distorcer em telas grandes */
+    width: 100%;      /* Define um tamanho limite para não distorcer em telas grandes */
     
 }
 
@@ -76,7 +74,7 @@ body{
     flex-direction: column;  /* No celular, empilhar os botões economiza espaço e melhora o clique */
     width: 100%;
     max-width: 320px;
-    gap: 15px;               /* 👉 ESSA LINHA ESPAÇA OS BOTÕES ENTRE SI */
+    gap: 25px;               /* 👉 ESSA LINHA ESPAÇA OS BOTÕES ENTRE SI */
     margin-bottom: 20px;     /* Afasta os botões da bordinha de baixo da tela */
     
     
