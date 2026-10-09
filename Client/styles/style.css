@@ -1,6 +1,6 @@
 *{
     box-sizing: border-box;/*Faz com que todo elemento não considere sua border já seja incluida ao calculo final de Height e Width*/
-    padding: 0; /*Tira o preenchimento de todos os elementos*/ 
+
     margin: 0; /*Tira a margem de todos os elementos*/
 }
 
@@ -11,7 +11,7 @@ body{
 .container {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     justify-content: space-between; /* Distribui topo, meio e botões uniformemente */
     min-height: 100vh;             /* Ocupa 100% da altura da tela do celular */
     box-sizing: border-box;
@@ -37,14 +37,12 @@ body{
 }
 
 #cabecalho{
+
     display: grid;/*Faz com que o elemento específico tome 3 colunas do grid*/
-    grid-column:2 ;
+    grid-column:span 3 ;
     text-align: center;
 
 
-    
-
-    justify-content: center; /*Definiu que o elemento deve estar ao centro do local em qual ocupa*/
     color: #FFFFFD;
     padding: 10px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
