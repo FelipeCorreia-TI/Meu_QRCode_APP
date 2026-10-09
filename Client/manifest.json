@@ -1,0 +1,23 @@
+{
+    "name":"Meu QR Code SESI",
+    "short_name":"Meu QR CODE",
+    "description":"Aplicativo para armazenamento do QR CODE do SESI",
+    "start_url":"./index.html",
+    "display":"standalone",
+    "background_color":"#3D3B3B",
+    "theme_color":"#FF0413",
+    "orientation":"portrait",
+    "icons": [
+        {
+            "src":"icon/icon_site192x192.png",
+            "sizes":"192x192",
+            "type":"image/png"
+        },
+        {
+            "src":"icon/icon_site512x512.png",
+            "sizes":"512x512",
+            "type":"image/png"
+        }
+    ]
+
+}
