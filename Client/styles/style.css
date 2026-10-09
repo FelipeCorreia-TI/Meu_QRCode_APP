@@ -93,9 +93,19 @@ body{
     transform: scale(0.95);
 }
 
-#remove_imagem{
-    pointer-events: none;
-    opacity: 0.5;
+/* Estilo padrão das suas labels/botões */
+.botao {
+    pointer-events: auto;
+    opacity: 1;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+/* Classe que o JavaScript vai injetar para trancar o botão */
+.botao.desabilitado {
+    pointer-events: none !important; /* Força o bloqueio do clique */
+    opacity: 0.3 !important;        /* Deixa bem clarinho/apagado */
+    cursor: not-allowed;
 }
 
 @media (min-width: 768px){

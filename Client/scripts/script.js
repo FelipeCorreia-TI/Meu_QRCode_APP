@@ -1,33 +1,112 @@
-const fotoVisualizar = document.getElementById ("foto_visualizar"); //Pega o Id do elemento HTML - foto_visualizar
+const fotoVisualizar = document.getElementById("foto_visualizar"); 
+const removeFoto = document.getElementById("remove_imagem"); // Pega a label de remover
+const uploadFoto = document.getElementById("upload_imagem"); // Pega o input de arquivo
+const labelUpload = document.getElementById("label_upload"); // Pega a label de adicionar
 
-const removeFoto = document.getElementById("remove_imagem")
+// Estado Inicial: Adicionar liberado, Remover bloqueado
+removeFoto.classList.add("desabilitado");
+labelUpload.classList.remove("desabilitado");
 
-const uploadFoto = document.getElementById("upload_imagem"); //Pega o Id do elemento HTML - upload_imagem
+let db = null;
+const request = indexedDB.open("GaleriaDB", 1);
 
-removeFoto.disabled = true;
+request.onupgradeneeded = function(event) {
+  const banco = event.target.result;
+  if (!banco.objectStoreNames.contains("fotos")) {
+    banco.createObjectStore("fotos", { keyPath: "id" });
+  }
+};
 
-uploadFoto.addEventListener('change', function (event) { // na variável uploadFoto (que pega o id de upload_imagem) adicionamos um evento que irá 'ouvir' o que será feito (ex: click ou change) e o valor dessa escuta vai para variável event (ela é a variável de entrada)
-  const arquivo = event.target.files[0]; //cria uma variável que colocará esse valor de event dentro de uma array denominando sempre o que vir como primeiro
+request.onsuccess = function(event) {
+  db = event.target.result;
+  console.log("IndexedDB pronto.");
+  carregarFotoSalva();
+};
 
-  if (arquivo && arquivo.type.startsWith('image/')) { //Se houver arquivo e o tipo do arquivo foi 'image/*' (qualquer tipo de arquivo imagem)
-    fotoVisualizar.src = URL.createObjectURL(arquivo); //Usa uma API nativa para gerar uma URL temporária e joga o elemento de upload foto para dentro do elemento img do html
+function carregarFotoSalva() {
+  if (!db) return;
 
-    removeFoto.style = "pointer-events:all ; opacity: 100 ;";
-    removeFoto.disabled = false;
-  } else { //Caso a validação não seja atendida
-    fotoVisualizar.src = "https://s2-techtudo.glbimg.com/mTOxpglY5vPGVghs4JD4fihcVbo=/0x0:620x443/600x0/smart/filters:gifv():strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2021/Y/5/iF8OmoTy6eQdkT9Xjz5g/2012-11-05-fundo-transparente.png"; //deixa o elemento vázio e dá um aviso.
+  const transacao = db.transaction("fotos", "readonly");
+  const tabela = transacao.objectStore("fotos");
+  const consulta = tabela.get("foto_atual"); 
+
+  consulta.onsuccess = function() {
+    const registro = consulta.result;
+    
+    // Se achou uma foto no banco, exibe e altera o estado dos botões
+    if (registro && registro.arquivo) {
+      const urlTemporaria = URL.createObjectURL(registro.arquivo);
+      fotoVisualizar.src = urlTemporaria;
+      
+      // ESTADO: Ativa Remover, Desativa Adicionar
+      removeFoto.classList.remove("desabilitado"); 
+      labelUpload.classList.add("desabilitado");
+    }
+  };
+}
+
+// EVENTO DE UPLOAD
+uploadFoto.addEventListener('change', function (event) { 
+  const arquivo = event.target.files[0]; // Captura o arquivo usando o índice correto
+
+  if (arquivo && arquivo.type.startsWith('image/')) { 
+    const urlTemporaria = URL.createObjectURL(arquivo);
+    fotoVisualizar.src = urlTemporaria; 
+    
+    // ALTERAÇÃO DE ESTADO: Ativa Remover, Desativa Adicionar
+    removeFoto.classList.remove("desabilitated"); // Limpeza de segurança
+    removeFoto.classList.remove("desabilitado"); 
+    labelUpload.classList.add("desabilitado"); 
+
+    const registroFoto = {
+      id: "foto_atual", 
+      nomeArquivo: arquivo.name,
+      tipo: arquivo.type,
+      dataCriacao: new Date().toISOString(),
+      tamanho: arquivo.size,
+      arquivo: arquivo 
+    };
+
+    if (db) {
+      const transacao = db.transaction("fotos", "readwrite");
+      const tabela = transacao.objectStore("fotos");
+      tabela.put(registroFoto); 
+    }
+
+  } else { 
+    limparInterface();
     alert("Por favor, selecione um arquivo de imagem válido.");
   }
 });
 
-removeFoto.onclick = function(){
-    var confirmar = confirm("Deseja realmente excluir?")
+// EVENTO DE REMOVER
+removeFoto.onclick = function(e) {
+    // Como é uma label, evitamos qualquer comportamento padrão do navegador
+    e.preventDefault();
 
-    if(confirmar == true){
-      fotoVisualizar.src = "https://s2-techtudo.glbimg.com/mTOxpglY5vPGVghs4JD4fihcVbo=/0x0:620x443/600x0/smart/filters:gifv():strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2021/Y/5/iF8OmoTy6eQdkT9Xjz5g/2012-11-05-fundo-transparente.png";
-      removeFoto.style = "pointer-events:none; opacity: 0.5";
-    } 
+    const desejaRemover = confirm("Tem certeza de que deseja remover este QR Code?");
+    
+    if (desejaRemover && db) {
+        const transacao = db.transaction("fotos", "readwrite");
+        const tabela = transacao.objectStore("fotos");
+        const requestDelete = tabela.delete("foto_atual");
+
+        requestDelete.onsuccess = function() {
+          limparInterface();
+        };
+    }
 };
 
-
-
+function limparInterface() {
+  if (fotoVisualizar.src && fotoVisualizar.src.startsWith('blob:')) {
+    URL.revokeObjectURL(fotoVisualizar.src);
+  }
+  
+  // Volta para a imagem padrão do Sesi caso remova o QR Code
+  fotoVisualizar.src = "https://images.seeklogo.com/logo-png/22/1/sesi-logo-png_seeklogo-223485.png"; 
+  
+  // RESET DE ESTADO: Bloqueia Remover, Libera Adicionar
+  removeFoto.classList.add("desabilitado"); 
+  labelUpload.classList.remove("desabilitado"); 
+  uploadFoto.value = ""; // Reseta o input
+}
