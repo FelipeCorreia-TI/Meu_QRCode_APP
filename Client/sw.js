@@ -1,4 +1,4 @@
-const CACHE_NAME = 'qrcode-sesi-v1';
+const CACHE_NAME = 'qrcode-sesi-v2';
 
 // Lista de arquivos estáticos que o app precisa para rodar offline
 const ASSETS = [
