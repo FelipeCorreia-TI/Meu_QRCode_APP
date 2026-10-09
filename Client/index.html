@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="icon/icon_site.ico" type="image/x-icon" />
     <link rel="stylesheet" href="styles/style.css" />
+    <link rel="manifest" href="manifest.json" />
     <title>Meu QRCode</title>
   </head>
 
@@ -48,15 +49,18 @@
       </main>
     </div>
     <script src="scripts/script.js"></script>
-    <script src="scripts/database.js"></script>
-    <link rel="manifest" href="../manifest.json">
+
     <script>
-      // Verifica se o navegador suporta Service Workers
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./sw.js')
-            .then((reg) => console.log('Service Worker registrado com sucesso!', reg.scope))
-            .catch((err) => console.error('Falha ao registrar o Service Worker:', err));
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("sw.js")
+            .then((reg) =>
+              console.log("Service Worker registrado com sucesso!", reg.scope),
+            )
+            .catch((err) =>
+              console.error("Falha ao registrar o Service Worker:", err),
+            );
         });
       }
     </script>
